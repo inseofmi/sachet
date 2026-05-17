@@ -3,432 +3,972 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тест по фармакологии — Вариант 1</title>
+    <title>Анатомия: Интерактивный Атлас</title>
     <style>
         :root {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-            --primary-color: #4a90e2;
-            --success-color: #2ecc71;
-            --error-color: #e74c3c;
-            --border-color: #e1e8ed;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            --panel-bg: #ffffff;
+            --text-main: #2c3e50;
+            --text-muted: #607d8b;
+            --accent-blue: #3498db;
+            --accent-emerald: #2ecc71;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px rgba(148, 163, 184, 0.1);
+            --shadow-hover: 0 15px 35px rgba(148, 163, 184, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.25s ease;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
+            padding: 40px 20px;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 840px;
             margin: 0 auto;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        h1 {
+        header {
             text-align: center;
-            color: #2c3e50;
-            margin-bottom: 10px;
+            margin-bottom: 35px;
         }
 
-        .subtitle {
-            text-align: center;
-            color: #7f8c8d;
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, #1e3c72, #2a5298);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        /* Панель управления */
+        .dashboard {
+            background: var(--panel-bg);
+            padding: 20px 25px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
             margin-bottom: 30px;
-            font-size: 1.1em;
-        }
-
-        .question-block {
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .question-title {
-            font-weight: 600;
-            font-size: 1.1em;
-            margin-bottom: 12px;
-            color: #2c3e50;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .option-label {
             display: flex;
             align-items: center;
-            padding: 10px 15px;
-            background: #f8fafc;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            justify-content: space-between;
+            gap: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
-        .option-label:hover {
+        .btn {
+            font-family: inherit;
+            background: #24292e;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .btn:hover {
+            background: #1a1e22;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .progress-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-grow: 1;
+            max-width: 60%;
+        }
+
+        .progress-track {
             background: #edf2f7;
+            border-radius: 999px;
+            height: 10px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--accent-blue), #2be49a);
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+        }
+
+        .progress-counter {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            min-width: 90px;
+            text-align: right;
+        }
+
+        /* Карточки вопросов */
+        .card {
+            background: var(--panel-bg);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
             border-color: #cbd5e1;
         }
 
-        .option-label input {
-            margin-right: 12px;
-            width: 18px;
-            height: 18px;
+        .card-trigger {
+            padding: 22px 25px;
+            display: flex;
+            align-items: center;
             cursor: pointer;
+            user-select: none;
         }
 
-        /* Стили для проверки */
-        .correct {
-            background-color: rgba(46, 204, 113, 0.15) !important;
-            border-color: var(--success-color) !important;
-            font-weight: bold;
-            color: #27ae60;
+        /* Кастомный Чекбокс */
+        .check-wrapper {
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
         }
 
-        .incorrect {
-            background-color: rgba(231, 76, 60, 0.15) !important;
-            border-color: var(--error-color) !important;
-            color: #c0392b;
-        }
-
-        .explanation {
-            margin-top: 10px;
-            padding: 10px 15px;
-            background: #f0f4f8;
-            border-left: 4px solid var(--primary-color);
-            font-size: 0.92em;
-            color: #475569;
-            display: none;
-            border-radius: 0 6px 6px 0;
-        }
-
-        .btn-submit {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.2em;
-            font-weight: bold;
+        .check-wrapper input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            outline: none;
             cursor: pointer;
-            transition: background 0.2s ease;
-            margin-top: 30px;
+            position: relative;
+            background: #fff;
         }
 
-        .btn-submit:hover {
-            background-color: #357abd;
+        .check-wrapper input[type="checkbox"]:checked {
+            background: var(--accent-emerald);
+            border-color: var(--accent-emerald);
         }
 
-        #result {
-            margin-top: 25px;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 1.3em;
-            font-weight: bold;
-            display: none;
+        .check-wrapper input[type="checkbox"]:checked::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 3px;
+            width: 6px;
+            height: 11px;
+            border: solid white;
+            border-width: 0 2.5px 2.5px 0;
+            transform: rotate(45deg);
         }
 
-        .result-success {
-            background-color: rgba(46, 204, 113, 0.2);
-            color: #27ae60;
-            border: 2px solid var(--success-color);
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-main);
+            flex-grow: 1;
+            padding-right: 15px;
+        }
+
+        .arrow-icon {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: var(--text-muted);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Выпадающий контент */
+        .card-body {
+            max-height: 0;
+            overflow: hidden;
+            background: #f8fafc;
+            border-top: 0 solid var(--border-color);
+        }
+
+        .card-inner-content {
+            padding: 25px;
+            font-size: 1.05rem;
+            color: #334155;
+        }
+
+        /* Состояния активации */
+        .card.is-open {
+            border-color: #94a3b8;
+        }
+
+        .card.is-open .card-body {
+            max-height: 1500px; /* Достаточно для любого блока текста */
+            border-top-width: 1px;
+        }
+
+        .card.is-open .arrow-icon {
+            transform: rotate(180deg);
+            stroke: var(--accent-blue);
+        }
+
+        .card.is-complete {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+        
+        .card.is-complete .card-title {
+            color: #166534;
+        }
+
+        /* Оформление контента внутри ответов */
+        strong {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        ul, ol {
+            padding-left: 22px;
+            margin: 12px 0;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        li::marker {
+            color: var(--accent-blue);
+        }
+
+        /* Мобильная адаптация */
+        @media (max-width: 640px) {
+            body { padding: 20px 10px; }
+            header h1 { font-size: 1.85rem; }
+            .dashboard { flex-direction: column; align-items: stretch; padding: 15px; }
+            .progress-section { max-width: 100%; }
+            .card-trigger { padding: 16px 18px; }
+            .card-title { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Тест по фармакологии</h1>
-    <div class="subtitle">Вариант 1</div>
+    <header>
+        <h1>Анатомия человека</h1>
+        <p>Интерактивная система самопроверки для подготовки к экзаменам</p>
+    </header>
 
-    <form id="quizForm">
-        <div class="question-block" data-correct="4">
-            <div class="question-title">1. Пилокарпин назначают при:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q1" value="1"> 1. миастении</label>
-                <label class="option-label"><input type="radio" name="q1" value="2"> 2. атонии кишечника</label>
-                <label class="option-label"><input type="radio" name="q1" value="3"> 3. гипертонии</label>
-                <label class="option-label"><input type="radio" name="q1" value="4"> 4. глаукоме</label>
+    <div class="dashboard">
+        <button class="btn" id="globalToggle">Раскрыть все ответы</button>
+        <div class="progress-section">
+            <div class="progress-track">
+                <div class="progress-fill" id="progressIndicator"></div>
             </div>
-            <div class="explanation">Пилокарпин — это М-холиномиметик. Он вызывает миоз (сужение зрачка), раскрывает угол передней камеры глаза и улучшает отток внутриглазной жидкости, снижая давление при глаукоме.</div>
+            <div class="progress-counter" id="progressLabel">Изучено: 0 / 26</div>
+        </div>
+    </div>
+
+    <div id="deck">
+        <!-- Блок 1 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">1. Организм человека как целостная биологическая система</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    Человек — это <strong>целостная биологическая система</strong>, в которой все органы и ткани связаны и работают согласованно. Они обеспечивают постоянный обмен веществ, поддерживают динамическое равновесие внутренней среды (<strong>гомеостаз</strong>) и адаптируют организм к изменениям внешней среды. Нарушение работы даже одной структуры неизбежно влияет на весь организм.
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="1">
-            <div class="question-title">2. Жаропонижающим действием обладают:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q2" value="1"> 1. ненаркотические анальгетики</label>
-                <label class="option-label"><input type="radio" name="q2" value="2"> 2. местные анестетики</label>
-                <label class="option-label"><input type="radio" name="q2" value="3"> 3. общие анестетики</label>
-                <label class="option-label"><input type="radio" name="q2" value="4"> 4. наркотические анальгетики</label>
+        <!-- Блок 2 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">2. Определение органа. Системы органов</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Ненаркотические анальгетики (парацетамол, ибупрофен) блокируют синтез простагландинов в ЦНС, воздействуя на центр терморегуляции в гипоталамусе.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Орган</strong> — это обособленная часть организма, имеющая определенную форму, строение, положение и выполняющая характерную функцию. К органам относятся мышцы, кости, кожа, печень, сердце и т.д.<br><br>
+                    <strong>Система органов</strong> — это анатомическое или функциональное объединение органов, имеющих общее происхождение и выполняющих единую глобальную задачу. В теле человека выделяют системы: костно-суставную, мышечную, сердечно-сосудистую (ССС), дыхательную, пищеварительную, выделительную, половую, иммунную, нервную и эндокринную.
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="2">
-            <div class="question-title">3. Фармакокинетика изучает:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q3" value="1"> 1. дозирование лекарственных веществ</label>
-                <label class="option-label"><input type="radio" name="q3" value="2"> 2. всасывание, распределение, превращение и выделение лекарственных веществ из организма</label>
-                <label class="option-label"><input type="radio" name="q3" value="3"> 3. принципы действия лекарственных веществ, фармакологические эффекты</label>
-                <label class="option-label"><input type="radio" name="q3" value="4"> 4. виды действия лекарственных веществ</label>
+        <!-- Блок 3 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">3. Ткани: эпителиальная, соединительная, нервная, мышечная</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Фармакокинетика — это то, что организм делает с лекарством (всасывание, распределение, метаболизм, выведение). То, как лекарство действует на организм — это фармакодинамика.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Ткань</strong> — совокупность клеток и межклеточного вещества, сходных по происхождению, строению и функциям.
+                    <ul>
+                        <li><strong>Эпителиальная:</strong> содержит минимум межклеточного вещества, клетки плотно прижаты. Образует покровы тела, выстилает полости внутренних органов и формирует большинство желез.</li>
+                        <li><strong>Соединительная:</strong> характеризуется сильно развитым межклеточным веществом (волокна и матрикс). Выполняет опорную, трофическую и защитную функции (кости, хрящи, кровь, жировая ткань).</li>
+                        <li><strong>Мышечная:</strong> обладает свойствами возбудимости и сократимости. Обеспечивает движения тела и внутренних органов (скелетная, гладкая, сердечная).</li>
+                        <li><strong>Нервная:</strong> состоит из нейронов и нейроглии. Генерирует и передает нервные импульсы, координируя работу всего тела.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="3">
-            <div class="question-title">4. Биодоступность – это:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q4" value="1"> 1. количество всосавшегося ЛВ в ж-к-т</label>
-                <label class="option-label"><input type="radio" name="q4" value="2"> 2. разрушение ЛВ в печени</label>
-                <label class="option-label"><input type="radio" name="q4" value="3"> 3. количество ЛВ, поступившего в общий кровоток по отношению к введенной дозе</label>
-                <label class="option-label"><input type="radio" name="q4" value="4"> 4. количество свободной фракции ЛВ.</label>
+        <!-- Блок 4 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">4-6. Кость как орган. Общий план строения скелета человека</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Биодоступность показывает долю активного вещества, которая в неизмененном виде достигла системного кровотока относительно исходной дозы.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Кость</strong> — живой орган, построенный из костной ткани, надкостницы, кровеносных сосудов, нервов и костного мозга. Функции: защитная, опорная, двигательная (рычаги), кроветворная и минеральное депо.<br><br>
+                    Скелет человека состоит из <strong>205–208 костей</strong> и делится на два отдела:
+                    <ol>
+                        <li><strong>Осевой скелет:</strong>
+                            <ul>
+                                <li><em>Череп (23 кости):</em> мозговой отдел (защита мозга) и лицевой отдел.</li>
+                                <li><em>Позвоночник:</em> 32–34 позвонка. Отделы: шейный (7), грудной (12), поясничный (5), крестцовый (5 сросшихся), копчиковый (3–5 сросшихся).</li>
+                                <li><em>Грудная клетка:</em> грудина, 12 пар ребер и грудные позвонки.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Добавочный скелет:</strong>
+                            <ul>
+                                <li><em>Верхние конечности:</em> пояс (лопатки, ключицы) и свободная конечность (плечевая кость, предплечье: локтевая и лучевая; кисть: запястье, пясть, фаланги).</li>
+                                <li><em>Нижние конечности:</em> пояс (таз: сросшиеся подвздошная, седалищная и лобковая кости) и свободная конечность (бедренная кость, надколенник, голень: большая и малая берцовые; стопа: предплюсна, плюсна, фаланги).</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <strong>Типы соединений:</strong> Неподвижные (швы черепа), полуподвижные (межпозвоночные хрящевые диски) и подвижные (суставы).
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="3">
-            <div class="question-title">5. Наиболее эффективный путь введения ЛП при неотложной терапии:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q5" value="1"> 1. пероральный</label>
-                <label class="option-label"><input type="radio" name="q5" value="2"> 2. сублингвальный</label>
-                <label class="option-label"><input type="radio" name="q5" value="3"> 3. внутривенный</label>
-                <label class="option-label"><input type="radio" name="q5" value="4"> 4. ректальный</label>
+        <!-- Блок 5 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">7. Основы миологии. Мышца как орган. Сокращение и утомление</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Внутривенный путь обеспечивает 100% биодоступность и моментальное попадание препарата в системный кровоток, что необходимо в экстренных случаях.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Мышца</strong> — орган опорно-двигательной системы, состоящий из пучков поперечно-полосатых мышечных волокон, соединительнотканных оболочек, сосудов и нервов. В теле человека около 600 мышц, большинство из них парные.<br><br>
+                    <strong>Основные топографические группы:</strong> мышцы головы (мимические и жевательные), мышцы шеи, туловища (спины, груди, живота), а также мышцы верхних и нижних конечностей.<br><br>
+                    <strong>Мышечное сокращение:</strong> регулируемый процесс укорочения волокон под действием нервных импульсов. Включает стадии возбуждения, сокращения и расслабления.<br>
+                    <strong>Утомление мышц:</strong> временное снижение работоспособности, возникающее при длительной интенсивной работе. Главные причины — истощение запасов энергии (гликогена), накопление продуктов распада (молочной кислоты) и утомление нервных центров.
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="2">
-            <div class="question-title">6. Суспензии нельзя вводить:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q6" value="1"> 1. внутрь</label>
-                <label class="option-label"><input type="radio" name="q6" value="2"> 2. внутривенно</label>
-                <label class="option-label"><input type="radio" name="q6" value="3"> 3. внутримышечно</label>
-                <label class="option-label"><input type="radio" name="q6" value="4"> 4. внутрисуставно</label>
+        <!-- Блок 6 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">8-9. Система органов дыхания и её роль в организме</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Суспензии содержат взвесь нерастворенных микрочастиц. При внутривенном введении они могут вызвать эмболию (закупорку) кровеносных сосудов.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Дыхание</strong> — комплекс физиологических процессов, обеспечивающих непрерывное поступление в организм кислорода, использование его для окисления веществ с выделением энергии и выведение углекислого газа.<br><br>
+                    <strong>Анатомический состав:</strong> воздухоносные пути (носовая полость, носоглотка, гортань, трахея, бронхиальное дерево) и главные органы газообмена — лёгкие.<br><br>
+                    <strong>Глобальная роль системы:</strong>
+                    <ul>
+                        <li>Снабжение клеток кислородом ($O_2$) для клеточного метаболизма.</li>
+                        <li>Экскреция газообразных метаболитов (прежде всего $CO_2$).</li>
+                        <li>Участие в терморегуляции и голосообразовании.</li>
+                        <li>Поддержание кислотно-основного баланса (pH) крови.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="2">
-            <div class="question-title">7. Производным нитрофурана является:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q7" value="1"> 1. дерматол</label>
-                <label class="option-label"><input type="radio" name="q7" value="2"> 2. фурацилин</label>
-                <label class="option-label"><input type="radio" name="q7" value="3"> 3. этакридина лактат</label>
-                <label class="option-label"><input type="radio" name="q7" value="4"> 4. бриллиантовый зеленый</label>
+        <!-- Блок 7 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">10-11. Этапы дыхания. Анатомия и физиология дыхательных путей</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Фурацилин (нитрофурал) относится к противомикробной группе нитрофуранов.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>5 ключевых этапов дыхания:</strong>
+                    <ol>
+                        <li>Внешнее (легочное) дыхание — вентиляция легких атмосферным воздухом.</li>
+                        <li>Газообмен в легких — диффузия $O_2$ и $CO_2$ через аэрогематический барьер между альвеолами и капиллярами.</li>
+                        <li>Транспорт газов кровью (в основном в связке с гемоглобином эритроцитов).</li>
+                        <li>Газообмен в периферических тканях.</li>
+                        <li>Тканевое (клеточное) дыхание — окисление органики в митохондриях клеток с синтезом АТФ.</li>
+                    </ol>
+                    <strong>Структурно-функциональные особенности:</strong>
+                    <ul>
+                        <li><em>Носовая полость:</em> покрыта мерцательным эпителием и густой сетью сосудов; очищает, согревает и увлажняет воздух.</li>
+                        <li><em>Гортань:</em> хрящевой орган, защищающий пути от попадания пищи (надгортанник) и содержащий голосовой аппарат.</li>
+                        <li><em>Трахея и бронхи:</em> построены из хрящевых полуколец/колец, предотвращающих спадение стенок при вдохе.</li>
+                        <li><em>Альвеолы легких:</em> микроскопические пузырьки, выстланные однослойным эпителием. За счет огромной суммарной площади обеспечивают сверхбыструю диффузию газов.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="2">
-            <div class="question-title">8. Лекарственные средства, применяемые для уничтожения микроорганизмов на коже и слизистых оболочках:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q8" value="1"> 1. дезинфицирующие</label>
-                <label class="option-label"><input type="radio" name="q8" value="2"> 2. антисептические</label>
-                <label class="option-label"><input type="radio" name="q8" value="3"> 3. химиотерапевтические</label>
-                <label class="option-label"><input type="radio" name="q8" value="4"> 4. противомикробные</label>
+        <!-- Блок 8 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">12-14. Характеристика сердечно-сосудистой и лимфатической систем</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Антисептики применяются местно на живых тканях (кожа, раны). Дезинфицирующие средства предназначены исключительно для неживых объектов и поверхностей.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Сердечно-сосудистая система (ССС)</strong> осуществляет непрерывную транспортировку крови по организму. 
+                    <ul>
+                        <li><em>Сердце:</em> центральный полый мышечный орган, выполняющий функцию насоса.</li>
+                        <li><em>Артерии:</em> сосуды, несущие кровь <u>от</u> сердца (независимо от того, насыщена она кислородом или нет).</li>
+                        <li><em>Вены:</em> сосуды, собирающие кровь и несущие её <u>к</u> сердцу.</li>
+                        <li><em>Капилляры:</em> мельчайшие сосуды, где происходит непосредственный обмен газами и нутриентами с тканевой жидкостью.</li>
+                    </ul>
+                    <strong>Лимфатическая система:</strong> является дополнительным руслом для оттока жидкости. Она собирает избыток тканевой жидкости (превращая её в лимфу) и возвращает её в венозное русло. Также транспортирует крупные молекулы белков, жировые эмульсии из кишечника и выполняет важнейшую иммунную роль (фильтрация в лимфоузлах).
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="1">
-            <div class="question-title">9. Кровоостанавливающим действием обладает антисептик:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q9" value="1"> 1. калия перманганат</label>
-                <label class="option-label"><input type="radio" name="q9" value="2"> 2. фурацилин</label>
-                <label class="option-label"><input type="radio" name="q9" value="3"> 3. перекись водорода</label>
-                <label class="option-label"><input type="radio" name="q9" value="4"> 4. хлорамин</label>
+        <!-- Блок 9 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">15-16. Строение и деятельность сердца. Сердечный цикл</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Концентрированный раствор калия перманганата за счет окислительных свойств денатурирует белки, обеспечивая выраженный вяжущий и прижигающий (гемостатический) эффект на капиллярах.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Анатомия сердца:</strong> состоит из 4 камер (правое/левое предсердия и правый/левый желудочки). Левая половина сердца содержит артериальную кровь, правая — венозную. На границе камер лежат <em>створчатые клапаны</em> (двустворчатый/митральный слева, трехстворчатый справа). На выходе в крупные сосуды — <em>полулунные клапаны</em>. Стенка состоит из эндокарда, миокарда (мышечный слой) и эпикарда.<br><br>
+                    <strong>Сердечный цикл (в норме длится около 0.8 секунд):</strong>
+                    <ol>
+                        <li><strong>Систола предсердий (0.1 сек):</strong> предсердия сжимаются, активно дожимая кровь в расслабленные желудочки.</li>
+                        <li><strong>Систола желудочков (0.3 сек):</strong> желудочки мощно сокращаются, створчатые клапаны закрываются со звуком (первый тон сердца), полулунные клапаны открываются, и кровь выбрасывается в аорту и легочный ствол.</li>
+                        <li><strong>Общая диастола (0.4 сек):</strong> все камеры расслаблены, полулунные клапаны закрыты (второй тон сердца). Происходит пассивное наполнение предсердий и желудочков кровью.</li>
+                    </ol>
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="4">
-            <div class="question-title">10. Наркотическое противокашлевое средство:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q10" value="1"> 1. бромгексин</label>
-                <label class="option-label"><input type="radio" name="q10" value="2"> 2. бронхолитин</label>
-                <label class="option-label"><input type="radio" name="q10" value="3"> 3. мукалтин</label>
-                <label class="option-label"><input type="radio" name="q10" value="4"> 4. кодеин</label>
+        <!-- Блок 10 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">17. Основные сосуды большого круга кровообращения</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Кодеин — это опиоид, угнетающий кашлевой центр непосредственно в ЦНС, способен вызывать зависимость.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Большой круг кровообращения (БКК)</strong> начинается в <strong>левом желудочке</strong>, откуда насыщенная кислородом кровь выталкивается в <strong>аорту</strong>.<br><br>
+                    От дуги аорты и её нисходящей части отходят крупные артерии, питающие голову (сонные артерии), верхние конечности (подключичные артерии), органы брюшной полости (чревный ствол, брыжеечные артерии, почечные артерии) и нижние конечности (подвздошные артерии).<br><br>
+                    Пройдя через капиллярные сети органов, кровь становится венозной и собирается в две магистральные вены: <strong>верхнюю полую вену</strong> (собирает кровь от головы, шеи и рук) и <strong>нижнюю полую вену</strong> (от нижней половины туловища и ног). Обе полые вены впадают в <strong>правое предсердие</strong>, где БКК завершается.
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="2">
-            <div class="question-title">11. Атенолол применяют для лечения:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q11" value="1"> 1. атеросклероза</label>
-                <label class="option-label"><input type="radio" name="q11" value="2"> 2. стенокардии</label>
-                <label class="option-label"><input type="radio" name="q11" value="3"> 3. брадикардии</label>
-                <label class="option-label"><input type="radio" name="q11" value="4"> 4. бронхиальной астмы</label>
+        <!-- Блок 11 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">18. Кровяное давление, его виды</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Атенолол — бета1-адреноблокатор. Снижает ЧСС и силу сокращений сердца, уменьшает потребность миокарда в кислороде, что эффективно при стенокардии. Противопоказан при бронхиальной астме и брадикардии.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Кровяное давление</strong> — гидродинамическое давление, которое кровь оказывает на стенки кровеносных сосудов. Главным образом измеряется на крупных артериях (артериальное давление — АД).<br><br>
+                    <strong>Виды давления:</strong>
+                    <ul>
+                        <li><strong>Систолическое (верхнее):</strong> фиксируется в момент сокращения желудочков сердца, когда в артерии выбрасывается новая порция крови. Норма: ~120 мм рт. ст.</li>
+                        <li><strong>Диастолическое (нижнее):</strong> фиксируется в момент расслабления желудочков (диастолы). Норма: ~80 мм рт. ст.</li>
+                        <li><strong>Пульсовое давление:</strong> математическая разница между систолическим и диастолическим давлением (в норме составляет 30–50 мм рт. ст.).</li>
+                    </ul>
+                    Патологическое стойкое повышение давления называется <em>гипертонией</em> (>140/90), снижение — <em>гипотонией</em> (<90/60).
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="1">
-            <div class="question-title">12. Феназепам относится к фармакологической группе:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q12" value="1"> 1. транквилизаторы</label>
-                <label class="option-label"><input type="radio" name="q12" value="2"> 2. снотворные средства</label>
-                <label class="option-label"><input type="radio" name="q12" value="3"> 3. отхаркивающие средства</label>
-                <label class="option-label"><input type="radio" name="q12" value="4"> 4. антигистаминные средства</label>
+        <!-- Блок 12 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">19. Лимфа и ее состав. Лимфатические сосуды</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Феназепам — бензодиазепиновый транквилизатор (анксиолитик) с сильным противотревожным и миорелаксирующим действием.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Лимфа</strong> — прозрачная или слегка желтоватая жидкость, образующаяся из тканевой жидкости путем фильтрации в лимфатические капилляры. Состоит из лимфоплазмы и форменных элементов (преимущественно лимфоцитов). Содержит мало белков в сравнении с плазмой крови.<br><br>
+                    <strong>Лимфатическое русло:</strong> начинается слепо замкнутыми <em>лимфатическими капиллярами</em>, которые пронизывают почти все ткани (исключение: ЦНС, хрусталик, роговица, плацента, эпидермис). Капилляры укрупняются в <em>лимфатические сосуды</em>, снабженные многочисленными клапанами для предотвращения обратного тока. По ходу сосудов лежат <em>лимфатические узлы</em> (иммунные фильтры). Все сосуды собираются в два главных протока — <strong>грудной проток</strong> и <strong>правый лимфатический проток</strong>, которые впадают в крупные вены шеи.
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="3">
-            <div class="question-title">13. Для лечения острых психозов назначают:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q13" value="1"> 1. седативные средства</label>
-                <label class="option-label"><input type="radio" name="q13" value="2"> 2. ноотропы</label>
-                <label class="option-label"><input type="radio" name="q13" value="3"> 3. нейролептики</label>
-                <label class="option-label"><input type="radio" name="q13" value="4"> 4. транквилизаторы</label>
+        <!-- Блок 13 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">20-22. Пищеварительная система. Физико-химическая обработка пищи</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Нейролептики (антипсихотики) блокируют дофаминовые рецепторы, купируя галлюцинации и бред при острых психозах.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Пищеварение</strong> — процесс механической и химической обработки пищи, направленный на расщепление сложных нутриентов до простых мономеров, способных всосаться в кровь. Длина ЖКТ взрослого человека — 9–10 метров.<br><br>
+                    <strong>Этапы обработки в отделах ЖКТ:</strong>
+                    <ul>
+                        <li><em>Ротовая полость:</em> механическое измельчение (зубы), смачивание (слюна) и начальный химический гидролиз углеводов под действием ферментов слюны (амилаза, мальтаза).</li>
+                        <li><em>Глотка и пищевод:</em> рефлекторное проведение пищевого комка в желудок.</li>
+                        <li><em>Желудок:</em> химическое расщепление белков ферментом пепсином в резко кислой среде, создаваемой соляной кислотой ($HCl$), плюс механическое перемешивание пищи.</li>
+                        <li><em>Тонкая кишка:</em> ключевой этап. В двенадцатиперстной кишке пища подвергается действию панкреатического сока, кишечного сока и желчи. Происходит окончательный гидролиз белков, жиров и углеводов.</li>
+                        <li><em>Толстая кишка:</em> всасывание воды, расщепление трудноперевариваемой клетчатки микрофлорой, формирование каловых масс.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="3">
-            <div class="question-title">14. Побочное действие гипотиазида:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q14" value="1"> 1. канцерогенность</label>
-                <label class="option-label"><input type="radio" name="q14" value="2"> 2. ульцерогенное действие</label>
-                <label class="option-label"><input type="radio" name="q14" value="3"> 3. гипокалиемия</label>
-                <label class="option-label"><input type="radio" name="q14" value="4"> 4. бронхоспазм</label>
+        <!-- Блок 14 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">23. Регуляция процессов пищеварения со стороны эндокринной и нервной систем</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Гипотиазид является тиазидным диуретиком. Блокируя реабсорбцию натрия, он одновременно усиливает выделение калия, приводя к гипокалиемии.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>1. Нервная регуляция (осуществляется вегетативной нервной системой):</strong>
+                    <ul>
+                        <li>Высший пищевой центр локализован в <strong>продолговатом мозге</strong>.</li>
+                        <li><em>Парасимпатический отдел</em> (главным образом блуждающий нерв) стимулирует моторику ЖКТ и резко увеличивает секрецию всех пищеварительных желез.</li>
+                        <li><em>Симпатический отдел</em> оказывает противоположное, угнетающее действие — снижает секрецию соков и тормозит перистальтику кишечника.</li>
+                    </ul>
+                    <strong>2. Эндокринная (гуморальная) регуляция:</strong> координируется местными гормонами, вырабатываемыми клетками стенок самого ЖКТ:
+                    <ul>
+                        <li><em>Гастрин:</em> стимулирует выработку $HCl$ и пепсиногена в желудке.</li>
+                        <li><em>Секретин и холецистокинин (ХЦК):</em> активируют выделение ферментов поджелудочной железы и сокращение желчного пузыря при поступлении химуса в 12-перстную кишку.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="1">
-            <div class="question-title">15. Целанид назначают при:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q15" value="1"> 1. сердечной недостаточности</label>
-                <label class="option-label"><input type="radio" name="q15" value="2"> 2. гипертоническом кризе</label>
-                <label class="option-label"><input type="radio" name="q15" value="3"> 3. брадикардии</label>
-                <label class="option-label"><input type="radio" name="q15" value="4"> 4. стенокардии</label>
+        <!-- Блок 15 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">24-26. Крупные пищеварительные железы. Регуляция выработки желчи</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Целанид — сердечный гликозид. Оказывает положительный инотропный эффект, увеличивая силу сокращений сердца при декомпенсированной сердечной недостаточности.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <ul>
+                        <li><strong>Слюнные железы:</strong> (3 пары крупных: околоушные, поднижнечелюстные, подъязычные) — поставляют слюну для первичного увлажнения и расщепления углеводов.</li>
+                        <li><strong>Печень:</strong> крупнейшая железа тела (~1500 г). Анатомическая единица — <em>печеночная долька</em>, построенная из клеток-гепатоцитов. Гепатоциты непрерывно вырабатывают <strong>желчь</strong> (1000–1800 мл/сутки).
+                            <ul>
+                                <li><em>Холерез</em> (желчеобразование) идет в печени <u>непрерывно</u> круглые сутки.</li>
+                                <li><em>Холекинез</em> (желчевыделение в 12-перстную кишку) происходит <u>периодически</u>, рефлекторно запускаясь исключительно в ответ на прием пищи.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Поджелудочная железа:</strong> орган смешанной секреции. Её экзокринная часть вырабатывает мощный панкреатический сок с ферментами, а эндокринная (островки Лангерганса) выделяет гормоны инсулин и глюкагон прямо в кровь для регуляции уровня глюкозы.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="2">
-            <div class="question-title">16. Атропина сульфат противопоказан при:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q16" value="1"> 1. язвенной болезни желудка</label>
-                <label class="option-label"><input type="radio" name="q16" value="2"> 2. глаукоме</label>
-                <label class="option-label"><input type="radio" name="q16" value="3"> 3. бронхиальной астме</label>
-                <label class="option-label"><input type="radio" name="q16" value="4"> 4. спазмах желудка</label>
+        <!-- Блок 16 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">27-28. Состав пищеварительных соков. Полостное и пристеночное пищеварение</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Атропин расширяет зрачок, что закрывает угол передней камеры глаза и препятствует оттоку внутриглазной жидкости, критически повышая давление при глаукоме.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Ферментативная активность соков:</strong>
+                    <ol>
+                        <li><em>Слюна:</em> амилаза и мальтаза (расщепление крахмала).</li>
+                        <li><em>Желудочный сок:</em> пепсин и химозин (расщепление белков).</li>
+                        <li><em>Панкреатический сок:</em> трипсин/химотрипсин (белки), амилаза (углеводы), липаза (жиры).</li>
+                        <li><em>Желчь:</em> не имеет ферментов. Её роль — <strong>эмульгирование жиров</strong> (расщепление крупных капель на микроскопические), активация липазы и стимуляция перистальтики.</li>
+                        <li><em>Кишечный сок:</em> пептидазы, сахараза, лактаза (расщепление до финальных мономеров).</li>
+                    </ol>
+                    <strong>Типы пищеварения по локализации:</strong>
+                    <ul>
+                        <li><strong>Полостное:</strong> гидролиз крупных полимеров ферментами в полости желудка и тонкой кишки.</li>
+                        <li><strong>Пристеночное (мембранное):</strong> происходит непосредственно на мембранах микроворсинок кишечного эпителия (щеточная кайма). Здесь олигомеры мгновенно расщепляются до мономеров и тут же всасываются.</li>
+                    </ul>
+                    <strong>Всасывание:</strong> активный или пассивный транспорт нутриентов. Аминокислоты и глюкоза уходят в кровь, продукты распада жиров — в лимфу.
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="3">
-            <div class="question-title">17. Препарат висмута, обладающий гастропротекторным действием:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q17" value="1"> 1. вентер</label>
-                <label class="option-label"><input type="radio" name="q17" value="2"> 2. альмагель</label>
-                <label class="option-label"><input type="radio" name="q17" value="3"> 3. Де-нол</label>
-                <label class="option-label"><input type="radio" name="q17" value="4"> 4. викалин</label>
+        <!-- Блок 17 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">29-32. Обмен веществ и энергии. Терморегуляция</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Де-нол (висмута трикалия дицитрат) создает защитную пленку-барьер над дефектами слизистой оболочки желудка.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Обмен веществ (метаболизм)</strong> — единство двух взаимосвязанных процессов:
+                    <ul>
+                        <li><strong>Анаболизм (пластический обмен / ассимиляция):</strong> реакции синтеза сложных внутриклеточных структур из простых веществ. Протекает с обязательной <em>затратой энергии</em>.</li>
+                        <li><strong>Катаболизм (энергетический обмен / диссимиляция):</strong> реакции распада и окисления сложных органических соединений до простых молекул. Протекает с <em>выделением энергии</em>, которая аккумулируется в молекулах <strong>АТФ</strong> (в сутки в теле оборачивается около 70 кг АТФ).</li>
+                    </ul>
+                    <strong>Терморегуляция:</strong> способность поддерживать постоянную температуру ядра тела (~36.6 °C) независимо от условий внешней среды (<strong>гомойотермия</strong>). Координируется центром в <strong>гипоталамусе</strong> и базируется на балансе двух факторов:
+                    <ol>
+                        <li><em>Химическая терморегуляция (теплопродукция):</em> генерация тепла за счет экзотермических реакций метаболизма в печени и скелетных мышцах (дрожь).</li>
+                        <li><em>Физическая терморегуляция (теплоотдача):</em> рассеивание тепла во внешнюю среду через расширение кожных капилляров, теплоизлучение и испарение пота.</li>
+                    </ol>
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="3">
-            <div class="question-title">18. Гипотензивное средство – ингибитор АПФ:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q18" value="1"> 1. верапамил</label>
-                <label class="option-label"><input type="radio" name="q18" value="2"> 2. резерпин</label>
-                <label class="option-label"><input type="radio" name="q18" value="3"> 3. каптоприл</label>
-                <label class="option-label"><input type="radio" name="q18" value="4"> 4. дибазол</label>
+        <!-- Блок 18 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">33-34. Морфофункциональная характеристика органов выделения</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Каптоприл ингибирует ангиотензинпревращающий фермент, снижая вазоконстрикцию и артериальное давление.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Выделение (экскреция)</strong> — выведение из внутренней среды организма конечных продуктов метаболизма, токсинов, избытка солей и воды. Экскреторную функцию выполняют легкие ($CO_2$, водяной пар), кожа (потовые железы), ЖКТ (тяжелые металлы, желчные пигменты) и мочевыделительная система.<br><br>
+                    <strong>Анатомическое деление мочевыделительной системы:</strong>
+                    <ul>
+                        <li><strong>Мочеобразующие органы:</strong> Почки (парный паренхиматозный орган бобовидной формы).</li>
+                        <li><strong>Мочевыводящие органы:</strong> Мочеточники, мочевой пузырь (резервуар) и мочеиспускательный канал (уретра).</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="2">
-            <div class="question-title">19. Желчегонным действием обладает:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q19" value="1"> 1. пепсин</label>
-                <label class="option-label"><input type="radio" name="q19" value="2"> 2. аллохол</label>
-                <label class="option-label"><input type="radio" name="q19" value="3"> 3. сок желудочный</label>
-                <label class="option-label"><input type="radio" name="q19" value="4"> 4. рамнил</label>
+        <!-- Блок 19 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">35. Строение почек. Механизм образования мочи</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Аллохол за счет сухой желчи и экстрактов трав стимулирует образование желчи и улучшает перистальтику путей.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Макростроение почки:</strong> под соединительнотканной капсулой лежит паренхима, состоящая из внешнего <em>коркового вещества</em> и внутреннего <em>мозгового вещества</em> (в виде почечных пирамид). Пирамиды открываются в почечные чашки, переходящие в общую <em>почечную лоханку</em>.<br><br>
+                    Структурно-функциональная единица почки — <strong>Нефрон</strong>. Механизм мочеобразования идет в два этапа:
+                    <ol>
+                        <li><strong>Клубочковая фильтрация (образование первичной мочи):</strong> Кровь в капиллярном клубочке Мальпигиева тельца находится под высоким давлением. Происходит продавливание жидкой части крови в полость капсулы Шумлянского-Боумена. Фильтруются вода и все мелкомолекулярные компоненты (глюкоза, аминокислоты, соли, мочевина). Белки и форменные элементы остаются в крови. Образуется <strong>первичная моча</strong> (~150–180 л/сутки).</li>
+                        <li><strong>Канальцевая реабсорбция (образование вторичной мочи):</strong> Первичная моча движется по системе извитых канальцев и петле Генле. Клетки канальцев активно возвращают (реабсорбируют) в кровь полезные вещества: всю глюкозу, аминокислоты, воду и необходимые ионы. В просвете канальца концентрируются только ненужные метаболиты. Образуется <strong>вторичная моча</strong> (~1.5 л/сутки), которая выводится из организма.</li>
+                    </ol>
+                </div>
+            </div>
         </div>
 
-        <div class="question-block" data-correct="3">
-            <div class="question-title">20. Слабительным действием обладает:</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q20" value="1"> 1. Де-нол</label>
-                <label class="option-label"><input type="radio" name="q20" value="2"> 2. абомин</label>
-                <label class="option-label"><input type="radio" name="q20" value="3"> 3. сенаде</label>
-                <label class="option-label"><input type="radio" name="q20" value="4"> 4. анестезол</label>
+        <!-- Блок 20 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">36-38. Физиология мочевыводящих путей. Клинический анализ мочи</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </div>
-            <div class="explanation">Сенаде (экстракт сенны) раздражает хеморецепторы толстого кишечника, ускоряя его перистальтику.</div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Топография и функции путей:</strong>
+                    <ul>
+                        <li><em>Мочеточники:</em> трубки длиной ~30 см, транспортирующие мочу благодаря перистальтическим волнам гладких мышечных стенок.</li>
+                        <li><em>Мочевой пузырь:</em> полый мышечный орган (емкость 500–700 мл). Его мышечный слой (<strong>детрузор</strong>) при растяжении посылает сигналы в крестцовый отдел спинного мозга, запуская рефлекс мочеиспускания.</li>
+                        <li><em>Мочеиспускательный канал (уретра):</em> у женщин короткий (2.5–3.5 см), что обуславливает высокий риск восходящих инфекций; у мужчин длинный (18–23 см), выполняет также функцию выведения эякулята.</li>
+                    </ul>
+                    <strong>Клинический анализ мочи (ОАМ):</strong> важнейший диагностический маркер. Оценивает физические свойства (удельный вес, цвет, прозрачность) и биохимический осадок. 
+                    <ul>
+                        <li><em>Подготовка:</em> исключение красящих продуктов и диуретиков за 24 часа.</li>
+                        <li><em>Сбор:</em> собирается первая утренняя <u>средняя порция</u> мочи после тщательного туалета наружных половых органов. Доставка в лабораторию — в течение 1.5–2 часов.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
-        <button type="button" class="btn-submit" onclick="checkQuiz()">Проверить тест</button>
-    </form>
+        <!-- Блок 21 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">39-40. Анатомия женской и мужской половых систем</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>1. Женская половая система:</strong>
+                    <ul>
+                        <li><em>Яичники:</em> парные женские гонады, локализованные в малом тазу. Выполняют генеративную (развитие яйцеклеток) и эндокринную (синтез эстрогенов и прогестерона) функции.</li>
+                        <li><em>Маточные трубы:</em> каналы с воронкообразными расширениями, где происходит встреча яйцеклетки со сперматозоидом (оплодотворение).</li>
+                        <li><em>Матка:</em> полый гладкомышечный орган. Состоит из эндометрия (внутренний функциональный слой) и миометрия. Предназначена для имплантации и вынашивания плода.</li>
+                        <li><em>Шейка матки, влагалище и наружные органы (вульва).</em></li>
+                    </ul>
+                    <strong>2. Мужская половая система:</strong>
+                    <ul>
+                        <li><em>Яички (тестикулы):</em> парные железы, вынесенные в <strong>мошонку</strong>. Низкая температура в мошонке (на 2-3 °C ниже брюшной) — обязательное условие для нормального сперматогенеза. Производят сперматозоиды и тестостерон.</li>
+                        <li><em>Семявыносящие протоки:</em> транспортируют зрелые клетки.</li>
+                        <li><em>Семенные пузырьки и Предстательная железа (простата):</em> экзокринные структуры, вырабатывающие жидкую фракцию спермы (обеспечивает подвижность, питание и защиту сперматозоидов в кислой среде влагалища).</li>
+                        <li><em>Копулятивный орган (пенис).</em></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-    <div id="result" class="result-success"></div>
+        <!-- Блок 22 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">41-43. Система крови. Иммунные и кроветворные органы</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Кровь</strong> — жидкая ткань внутренней среды, состоящая из <strong>плазмы</strong> (~55%) и <strong>форменных элементов</strong> (~45%):
+                    <ul>
+                        <li><em>Эритроциты:</em> безъядерные двояковогнутые диски, заполненные гемоглобином. Функция: транспорт $O_2$ и $CO_2$.</li>
+                        <li><em>Лейкоциты:</em> полноценные ядерные клетки, отвечающие за иммунный ответ (фагоцитоз, синтез антител).</li>
+                        <li><em>Тромбоциты:</em> цитоплазматические пластинки, инициирующие свертывание крови (гемостаз).</li>
+                    </ul>
+                    <strong>Группы крови (система АВ0):</strong> определяются наличием или отсутствием специфических антигенов (агглютиногенов А и В) на мембране эритроцитов: 0(I) — антигенов нет; А(II) — антиген А; В(III) — антиген В; АВ(IV) — присутствуют оба антигена. <strong>Резус-фактор ($Rh$)</strong> — антиген D, разделяющий людей на резус-положительных ($Rh^+$) и резус-отрицательных ($Rh^-$).<br><br>
+                    <strong>Органы иммунопоэза и гемопоэза:</strong>
+                    <ul>
+                        <li><em>Центральные:</em> <strong>Красный костный мозг</strong> (генерация всех клеток крови и созревание B-лимфоцитов) и <strong>Тимус</strong> (вилочковая железа, где происходит дифференцировка и «обучение» T-лимфоцитов).</li>
+                        <li><em>Периферические:</em> <strong>Селезенка</strong> (депо крови, разрушение старых эритроцитов, фильтрация крови), <strong>Лимфатические узлы</strong> (очистка лимфы от патогенов) и лимфоидные скопления слизистых оболочек (миндалины, аппендикс).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Блок 23 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">44-47. Эндокринная система. Свойства гормонов и топография желез</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Гуморальная регуляция</strong> — координация функций организма через жидкие среды с помощью <strong>гормонов</strong>. Гормоны выделяются <em>железами внутренней секреции (эндокринными)</em>, которые не имеют выводных протоков и секретируют напрямую в кровь.<br><br>
+                    <strong>Фундаментальные свойства гормонов:</strong> высокая биологическая активность (эффективны в ничтожно малых концентрациях), дистантный характер действия (влияют на органы, удаленные от железы), строгая специфичность взаимодействия с клеточными рецепторами, относительно малый размер молекул и быстрое разрушение в тканях.<br><br>
+                    <strong>Анатомическая топография эндокринной системы:</strong>
+                    <ul>
+                        <li><em>Гипофиз и эпифиз:</em> расположены в структурах головного мозга (гипофиз лежит в турецком седле клиновидной кости, руководит остальными железами за счет тропных гормонов).</li>
+                        <li><em>Щитовидная и паращитовидные железы:</em> фиксированы на передней и задней поверхностях гортани и трахеи на шее.</li>
+                        <li><em>Тимус:</em> локализован в верхнем средостении за грудиной.</li>
+                        <li><em>Надпочечники:</em> парные железы, расположенные на верхних полюсах почек (кора выделяет кортикостероиды, мозговое вещество — адреналин).</li>
+                        <li><em>Поджелудочная и половые железы:</em> органы смешанной секреции (эндокринные зоны поставляют гормоны в кровеносное русло).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Блок 24 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">48-50. Нервная система: Спинной и головной мозг</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Нервная система (НС)</strong> осуществляет сверхбыструю регуляцию за счет генерации потенциалов действия. Топографически делится на Центральную (ЦНС — головной и спинной мозг) и Периферическую (ПНС).<br><br>
+                    <strong>1. Спинной мозг:</strong> лежит в позвоночном канале. Построен из 31 сегмента. 
+                    <ul>
+                        <li><em>Серое вещество (внутри, форма бабочки):</em> образовано телами нейронов. Задние рога содержат чувствительные нейроны, передние — двигательные, боковые — вегетативные.</li>
+                        <li><em>Белое вещество (снаружи):</em> аксоны, формирующие восходящие и нисходящие проводящие пути. Выполняет рефлекторную и проводниковую функции.</li>
+                    </ul>
+                    <strong>2. Головной мозг:</strong> высший отдел ЦНС. Включает:
+                    <ul>
+                        <li><em>Ствол мозга (продолговатый мозг, мост, средний мозг):</em> содержит центры витальных рефлексов (дыхательный, сосудодвигательный в продолговатом мозге), проводящие тракты и ядра черепных нервов.</li>
+                        <li><em>Мозжечок:</em> координирует произвольные движения, отвечает за мышечный тонус, баланс и синергию.</li>
+                        <li><em>Промежуточный мозг:</em> <strong>Таламус</strong> (коллектор всех сенсорных путей, идущих к коре) и <strong>Гипоталамус</strong> (высший интегративный центр вегетативных функций, сна, эмоций и гомеостаза).</li>
+                        <li><em>Конечный мозг:</em> большие полушария, покрытые серой корой (высшая нервная деятельность — ВНД).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Блок 25 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">51-54. Периферическая и вегетативная НС. Высшая нервная деятельность</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Периферическая НС</strong> включает <strong>12 пар черепных нервов</strong>, отходящих от ствола головного мозга, и <strong>31 пару спинномозговых нервов</strong>, которые переплетаются и формируют нервные сплетения (шейное, плечевое, поясничное, крестцовое).<br><br>
+                    Функционально НС делится на соматическую (управление скелетной мускулатурой) и <strong>Вегетативную (автономную) НС</strong>, регулирующую внутреннюю среду без участия сознания. ВНС состоит из двух антагонистических отделов:
+                    <ul>
+                        <li><em>Симпатический отдел (эрготропный):</em> медиатор норадреналин. Запускается при стрессе («бей или беги»). Учащает пульс, повышает АД, расширяет бронхи и зрачки, тормозит пищеварение.</li>
+                        <li><em>Парасимпатический отдел (трофотропный):</em> медиатор ацетилхолин. Работает в условиях покоя и сна. Замедляет сердцебиение, сужает бронхи, мощно активирует секрецию и перистальтику ЖКТ.</li>
+                    </ul>
+                    <strong>Высшая нервная деятельность (ВНД):</strong> функционирование коры полушарий, обеспечивающее поведенческую адаптацию. Базируется на балансе двух типов рефлексов: <strong>безусловных</strong> (врожденные, видоспецифичные, жестко закрепленные анатомически) и <strong>условных</strong> (индивидуально приобретаемые в процессе онтогенеза на базе безусловных, способные угасать без подкрепления).
+                </div>
+            </div>
+        </div>
+
+        <!-- Блок 26 -->
+        <div class="card">
+            <div class="card-trigger">
+                <div class="check-wrapper" onclick="event.stopPropagation();">
+                    <input type="checkbox" onchange="calcProgress()">
+                </div>
+                <div class="card-title">55-60. Сенсорные системы. Анализаторы чувств. Анатомия кожи</div>
+                <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="card-body">
+                <div class="card-inner-content">
+                    <strong>Анализатор (сенсорная система)</strong> по И.П. Павлову включает 3 звена: периферическое (рецептор), проводниковое (афферентный нерв) и центральное (корковый конец в коре мозга).<br><br>
+                    <strong>Органы чувств:</strong>
+                    <ul>
+                        <li><em>Орган зрения (глаз):</em> защищен вспомогательным аппаратом (веки, слезные железы). Стенка имеет 3 оболочки: наружную (фиброзную — склера и прозрачная роговица), среднюю (сосудистую — собственно сосудистая оболочка, цилиарное тело и радужка со зрачком) и внутреннюю (сетчатка с фоторецепторами: палочки — свет/тень, колбочки — цвет). Хрусталик осуществляет аккомодацию. Корковый центр — затылочная доля.</li>
+                        <li><em>Орган слуха и равновесия (ухо):</em> наружное (ушная раковина, проход), среднее (барабанная полость с косточками: молоточек, наковальня, стремечко) и внутреннее (лабиринт: <strong>улитка</strong> содержит фонорецепторы Кортиева органа; полукружные каналы — вестибулярный аппарат). Корковый центр — височная доля.</li>
+                        <li><em>Вкус и Обоняние:</em> хеморецепторные системы. Вкус анализируется почками сосочков языка (теменная доля коры). Обоняние — рецепторными клетками верхней носовой раковины, импульсы идут в лимбическую систему без переключения в таламусе.</li>
+                    </ul>
+                    <strong>Кожа</strong> — общий покров тела, выполняющий защитную, рецепторную, выделительную, терморегуляторную и метаболическую функции. Состоит из 3 слоев:
+                    <ol>
+                        <li><strong>Эпидермис:</strong> многослойный ороговевающий эпителий. Содержит меланоциты (синтез пигмента меланина для защиты от ультрафиолета).</li>
+                        <li><strong>Дерма (собственно кожа):</strong> сосочковый и сетчатый слои из плотной соединительной ткани. Содержит эластиновые волокна, сосуды, рецепторы осязания, волосяные фолликулы, сальные и потовые железы.</li>
+                        <li><strong>Гиподерма:</strong> подкожно-жировая клетчатка (термоизоляция и амортизация). Производные кожи — волосы и ногти.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <script>
-function checkQuiz() {
-    const questionBlocks = document.querySelectorAll('.question-block');
-    let score = 0;
-    const totalQuestions = questionBlocks.length;
+    // Интерактивное открытие карточки
+    document.querySelectorAll('.card-trigger').forEach(trigger => {
+        trigger.addEventListener('click', () => {
+            const currentCard = trigger.closest('.card');
+            
+            // Если нужно закрывать остальные при открытии текущей — раскомментируйте строчки ниже:
+            /* document.querySelectorAll('.card').forEach(c => {
+                if(c !== currentCard) c.classList.remove('is-open');
+            }); */
 
-    questionBlocks.forEach((block, index) => {
-        const correctValue = block.getAttribute('data-correct');
-        const qName = `q${index + 1}`;
-        const selectedOption = block.querySelector(`input[name="${qName}"]:checked`);
-        const labels = block.querySelectorAll('.option-label');
-        const explanation = block.querySelector('.explanation');
-
-        // Сбрасываем старые стили проверки
-        labels.forEach(label => {
-            label.classList.remove('correct', 'incorrect');
+            currentCard.classList.toggle('is-open');
         });
-        if (explanation) explanation.style.display = 'block';
-
-        // Подсвечиваем верный вариант в любом случае
-        const correctLabel = labels[parseInt(correctValue) - 1];
-        if (correctLabel) {
-            correctLabel.classList.add('correct');
-        }
-
-        if (selectedOption) {
-            if (selectedOption.value === correctValue) {
-                score++;
-            } else {
-                // Если пользователь ошибся, подсвечиваем его выбор красным
-                const incorrectLabel = labels[parseInt(selectedOption.value) - 1];
-                if (incorrectLabel) {
-                    incorrectLabel.classList.add('incorrect');
-                }
-            }
-        }
     });
 
-    // Вывод результатов
-    const resultDiv = document.getElementById('result');
-    resultDiv.style.display = 'block';
-    resultDiv.innerHTML = `Ваш результат: ${score} из ${totalQuestions} правильных ответов.`;
-    
-    // Плавный скролл к результату
-    resultDiv.scrollIntoView({ behavior: 'smooth' });
-}
+    // Расчет прогресса
+    function calcProgress() {
+        const checkboxes = document.querySelectorAll('.card input[type="checkbox"]');
+        let checkedCount = 0;
+
+        checkboxes.forEach(box => {
+            const targetCard = box.closest('.card');
+            if (box.checked) {
+                checkedCount++;
+                targetCard.classList.add('is-complete');
+            } else {
+                targetCard.classList.remove('is-complete');
+            }
+        });
+
+        const total = checkboxes.length;
+        const percentage = (checkedCount / total) * 100;
+
+        document.getElementById('progressIndicator').style.width = percentage + '%';
+        document.getElementById('progressLabel').innerText = `Изучено: ${checkedCount} / ${total}`;
+    }
+
+    // Глобальный переключатель (Раскрыть / Скрыть всё)
+    const globalBtn = document.getElementById('globalToggle');
+    let isOpenState = false;
+
+    globalBtn.addEventListener('click', () => {
+        const cards = document.querySelectorAll('.card');
+        isOpenState = !isOpenState;
+
+        cards.forEach(card => {
+            if (isOpenState) {
+                card.classList.add('is-open');
+            } else {
+                card.classList.remove('is-open');
+            }
+        });
+
+        globalBtn.innerText = isOpenState ? "Скрыть все ответы" : "Раскрыть все ответы";
+    });
 </script>
 
 </body>
 </html>
+ 
